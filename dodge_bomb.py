@@ -2,6 +2,15 @@ import pygame as pg
 import sys
 import random
 
+
+delta = {
+    pg.K_UP:(0,-1),
+    pg.K_DOWN:(0,1),
+    pg.K_LEFT:(-1,0), 
+    pg.K_RIGHT:(1,0)
+         }
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((1600, 900))
@@ -15,22 +24,27 @@ def main():
     x=random.randint(10,1590)
     y=random.randint(10,890)
     #screen.blit(bb_img, [x,y])
-    vx=+5 ; vy=+5  # 速度の設定
-    bb_rct=bb_img.get_rect()
-    bb_rct.center= x, y
+    vx=+1 ; vy=+1  # 速度の設定
+    bb_rct = bb_img.get_rect()
+    bb_rct.center = x, y
+    
+    kk_rct = kk_img.get_rect()
+    kk_rct.center = 900,400
     tmr = 0
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return 0
         tmr += 1
-        bb_rct.move_ip(vx,vy)  # 爆弾を動かす
-        if x+10>=1600 or 0>=x-10:
-            vx*=-1
-        if y+10>=900 or 0>=y-10:
-            vy*=-1
+        
+        key_lst = pg.key.get_pressed()
+        for k,mv in delta.items():
+            if key_lst[k]:
+                kk_rct.move_ip(mv)
+            
         screen.blit(bg_img, [0, 0])
-        screen.blit(kk_img, [900, 400])
+        screen.blit(kk_img, kk_rct)
+        bb_rct.move_ip(vx,vy)  # 爆弾を動かす
         screen.blit(bb_img, bb_rct)
         
         pg.display.update()
