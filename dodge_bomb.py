@@ -12,12 +12,13 @@ def main():
     bb_img = pg.Surface((20,20))
     pg.draw.circle(bb_img,(255,0,0),(10,10),10)  # 練習1
     bb_img.set_colorkey((0,0,0))  #四隅を透明に
-    tmr = 0
     x=random.randint(10,1590)
     y=random.randint(10,890)
+    #screen.blit(bb_img, [x,y])
     vx=+5 ; vy=+5  # 速度の設定
     bb_rct=bb_img.get_rect()
-    bb_rct.move_ip(vx,vy) 
+    bb_rct.center= x, y
+    tmr = 0
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
@@ -30,7 +31,7 @@ def main():
             vy*=-1
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, [900, 400])
-        screen.blit(bb_img, [x,y])
+        screen.blit(bb_img, bb_rct)
         
         pg.display.update()
         clock.tick(1000)
