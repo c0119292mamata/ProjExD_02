@@ -40,7 +40,7 @@ def main():
     x=random.randint(10,1590)
     y=random.randint(10,890)
     #screen.blit(bb_img, [x,y])
-    vx=+1 ; vy=+1  # 速度の設定
+    vx=[1,1,1,1,1,1,1,1] ; vy=[1,1,1,1,1,1,1,1]  # 速度の設定
     bb_rct = bb_img.get_rect()
     bb_rct.center = x, y
     bb_imgs=[]
@@ -87,12 +87,13 @@ def main():
                 if l>8:
                     l==8
         for i in range(l):
-            bb_rcts[i].move_ip(vx,vy)  # 爆弾を動かす
+            bb_rcts[i].move_ip(int(vx[i]),int(vy[i]))  # 爆弾を動かす
             yoko,tate = check_bound(screen.get_rect(),bb_rcts[i])
             if not yoko:
-                vx*=-1
+                vx[i]*=-1
             if not tate:
-                vy*=-1
+                vy[i]*=-1
+            
             screen.blit(bb_imgs[i], bb_rcts[i])
             if kk_rct.colliderect(bb_rcts[i]):
                 return 0
