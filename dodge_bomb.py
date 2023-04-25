@@ -25,10 +25,10 @@ def check_bound(scr_rct:pg.Rect,obj_rct:pg.Rect):
         tate = False
     return yoko,tate
 
-iro=[(255,0,0),(0,255,0),(0,0,255),(255,255,0),(0,255,255),(255,0,255,),(255,255,255),(0,0,0)]
+iro=[(255,0,0),(0,255,0),(0,0,255),(255,255,0),(0,255,255),(255,0,255,),(255,255,255),(0,0,1)]
 
 def main():
-    pg.display.set_caption("逃げろ！こうかとん")
+    pg.display.set_caption("逃げろ！こうかとん！頑張れ！")
     screen = pg.display.set_mode((1600, 900))
     clock = pg.time.Clock()
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
@@ -85,7 +85,7 @@ def main():
         if tmr%1000==0:
                 l+=1
                 if l>8:
-                    l==8
+                    l=8
         for i in range(l):
             bb_rcts[i].move_ip(int(vx[i]),int(vy[i]))  # 爆弾を動かす
             yoko,tate = check_bound(screen.get_rect(),bb_rcts[i])
@@ -95,6 +95,12 @@ def main():
                 vy[i]*=-1
             
             screen.blit(bb_imgs[i], bb_rcts[i])
+            for j in range(l):
+                if i==j:
+                    continue
+                if bb_rcts[i].colliderect(bb_rcts[j]):
+                    vx[i]*=-1
+                    vy[i]*=-1
             if kk_rct.colliderect(bb_rcts[i]):
                 return 0
         
