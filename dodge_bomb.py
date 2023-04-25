@@ -25,6 +25,7 @@ def check_bound(scr_rct:pg.Rect,obj_rct:pg.Rect):
         tate = False
     return yoko,tate
 
+iro=[(255,0,0),(0,255,0),(0,0,255),(255,255,0),(0,255,255),(255,0,255,),(255,255,255),(0,0,0)]
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -42,9 +43,22 @@ def main():
     vx=+1 ; vy=+1  # 速度の設定
     bb_rct = bb_img.get_rect()
     bb_rct.center = x, y
-    kk_rct = kk_img.get_rect()
-    kk_rct.center = 900,400
+    bb_imgs=[]
+    bb_rcts=[]
+    for i in range(8):
+        x=random.randint(10,1590)
+        y=random.randint(10,890)
+        bb_img = pg.Surface((20,20))
+        print(iro[1])
+        pg.draw.circle(bb_img,iro[i],(10,10),10)
+        bb_rct = bb_img.get_rect()
+        bb_rct.center = x, y
+        bb_imgs.append(bb_img)
+        bb_rcts.append(bb_rct)
     
+    l=1
+    kk_rct=kk_img.get_rect()
+    kk_rct.center=900,400
     tmr = 0
     while True:
         for event in pg.event.get():
@@ -57,44 +71,30 @@ def main():
         for k,mv in delta.items():
             if key_lst[k]:
                 kk_rct.move_ip(mv)
-                """if kk_rct.centerx+r>=1600 and k==pg.K_RIGHT:
-                    kk_rct.move_ip(-mv[0],-mv[1])
-                if kk_rct.centerx-r<=0 and k==pg.K_LEFT: 
-                    kk_rct.move_ip((1,0))
-                if kk_rct.centery+r>=900 and k==pg.K_DOWN:
-                    kk_rct.move_ip((0,-1))
-                if kk_rct.centery-r<=0 and k==pg.K_UP:
-                    kk_rct.move_ip((0,1))"""
+                
         
         if check_bound(screen.get_rect(),kk_rct)!=(True,True):
             for k,mv in delta.items():
                 if key_lst[k]:
+                    #direction(mv)
                     kk_rct.move_ip(-mv[0],-mv[1])
                     
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, kk_rct)
         
-        bb_rct.move_ip(vx,vy)  # 爆弾を動かす
-        
-        yoko,tate = check_bound(screen.get_rect(),bb_rct)
-        if yoko != True:
-            vx*=-1
-        if tate != True:
-            vy*=-1
-        """if bb_rct.centerx+10>=1600 or bb_rct.centerx-10<=0:
-            vx*=-1
-        if bb_rct.centery+10>=900 or bb_rct.centery-10<=0:
-            vy*=-1"""
-        screen.blit(bb_img, bb_rct)
-        
-        
-        """dist=math.sqrt((bb_rct.centerx-kk_rct.centerx)**2+
-              (bb_rct.centery-kk_rct.centery)**2)
-        dist_01=math.sqrt((10-50)**2*2)
-        if dist<=dist_01:
-            return 0"""
-        if kk_rct.colliderect(bb_rct):
-            return 0
+        for i in range(8):
+            bb_rcts[i].move_ip(vx,vy)  # 爆弾を動かす
+            yoko,tate = check_bound(screen.get_rect(),bb_rcts[i])
+            if yoko != True:
+                vx*=-1
+            if tate != True:
+                vy*=-1
+            if tmr%1000==0:
+                l+=1
+            for i in range(l):
+                screen.blit(bb_imgs[i], bb_rcts[i])
+            if kk_rct.colliderect(bb_rcts[i]):
+                return 0
         
         pg.display.update()
         clock.tick(1000)
