@@ -46,6 +46,8 @@ def main():
     bb_imgs=[]
     bb_rcts=[]
     m=[]
+    font1 = pg.font.SysFont("hg正楷書体pro", 150)
+    text1 = font1.render("game clear", True, (255,0,0))
     for i in range(8):
         x=random.randint(10,1590)
         y=random.randint(10,890)
@@ -61,6 +63,7 @@ def main():
     kk_rct=kk_img.get_rect()
     kk_rct.center=900,400
     tmr = 0
+    han=0
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
@@ -101,9 +104,14 @@ def main():
                 if bb_rcts[i].colliderect(bb_rcts[j]):
                     vx[i]*=-1
                     vy[i]*=-1
-            if kk_rct.colliderect(bb_rcts[i]):
+            if kk_rct.colliderect(bb_rcts[i]) and han==0:
                 return 0
         
+        if tmr//1000>=15:
+            screen.blit(text1, (400,400))
+            han=100
+        if tmr//1000>=18:
+            return 0
         pg.display.update()
         clock.tick(1000)
 
