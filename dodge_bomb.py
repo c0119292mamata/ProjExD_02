@@ -45,12 +45,13 @@ def main():
     bb_rct.center = x, y
     bb_imgs=[]
     bb_rcts=[]
+    m=[]
     for i in range(8):
         x=random.randint(10,1590)
         y=random.randint(10,890)
         bb_img = pg.Surface((20,20))
-        print(iro[1])
         pg.draw.circle(bb_img,iro[i],(10,10),10)
+        bb_img.set_colorkey((0,0,0))
         bb_rct = bb_img.get_rect()
         bb_rct.center = x, y
         bb_imgs.append(bb_img)
@@ -81,18 +82,18 @@ def main():
                     
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, kk_rct)
-        
-        for i in range(8):
+        if tmr%1000==0:
+                l+=1
+                if l>8:
+                    l==8
+        for i in range(l):
             bb_rcts[i].move_ip(vx,vy)  # 爆弾を動かす
             yoko,tate = check_bound(screen.get_rect(),bb_rcts[i])
-            if yoko != True:
+            if not yoko:
                 vx*=-1
-            if tate != True:
+            if not tate:
                 vy*=-1
-            if tmr%1000==0:
-                l+=1
-            for i in range(l):
-                screen.blit(bb_imgs[i], bb_rcts[i])
+            screen.blit(bb_imgs[i], bb_rcts[i])
             if kk_rct.colliderect(bb_rcts[i]):
                 return 0
         
