@@ -37,14 +37,27 @@ def main():
                 return 0
         tmr += 1
         
+        r=50
         key_lst = pg.key.get_pressed()
         for k,mv in delta.items():
             if key_lst[k]:
                 kk_rct.move_ip(mv)
-            
+                if kk_rct.centerx+r>=1600 and k==pg.K_RIGHT:
+                    kk_rct.move_ip((-1,0))
+                if kk_rct.centerx-r<=0 and k==pg.K_LEFT: 
+                    kk_rct.move_ip((1,0))
+                if kk_rct.centery+r>=900 and k==pg.K_DOWN:
+                    kk_rct.move_ip((0,-1))
+                if kk_rct.centery-r<=0 and k==pg.K_UP:
+                    kk_rct.move_ip((0,1))
+                    
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, kk_rct)
         bb_rct.move_ip(vx,vy)  # 爆弾を動かす
+        if bb_rct.centerx+10>=1600 or bb_rct.centerx-10<=0:
+            vx*=-1
+        if bb_rct.centery+10>=900 or bb_rct.centery-10<=0:
+            vy*=-1
         screen.blit(bb_img, bb_rct)
         
         pg.display.update()
