@@ -1,7 +1,7 @@
 import pygame as pg
 import sys
 import random
-
+import math
 
 delta = {
     pg.K_UP:(0,-1),
@@ -50,6 +50,7 @@ def main():
                     kk_rct.move_ip((0,-1))
                 if kk_rct.centery-r<=0 and k==pg.K_UP:
                     kk_rct.move_ip((0,1))
+        
                     
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, kk_rct)
@@ -59,6 +60,12 @@ def main():
         if bb_rct.centery+10>=900 or bb_rct.centery-10<=0:
             vy*=-1
         screen.blit(bb_img, bb_rct)
+        
+        dist=math.sqrt((bb_rct.centerx-kk_rct.centerx)**2+
+              (bb_rct.centery-kk_rct.centery)**2)
+        dist_01=math.sqrt((10-50)**2*2)
+        if dist<=dist_01:
+            return 0
         
         pg.display.update()
         clock.tick(1000)
